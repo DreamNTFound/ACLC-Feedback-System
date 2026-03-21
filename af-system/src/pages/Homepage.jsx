@@ -33,6 +33,9 @@ export default function Homepage() {
     created_at: new Date(),
   };
   const [formData, setFormData] = useState(initialData);
+  const resetForm = () => {
+    setFormData(initialData);
+  };
   const [feedbackData, setFeedbackData] = useState([]);
 
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function Homepage() {
     e.preventDefault();
     const form = await submitFeedback(formData);
     setFeedbackData((prev) => [...prev, form]);
-    setFormData(initialData);
+    resetForm();
   };
 
   const filteredFeedback = feedbackData.filter((fb) => {
@@ -218,7 +221,7 @@ export default function Homepage() {
           <form className="px-4 pb-6 space-y-4">
             <input
               type="text"
-              value={feedbackData.title}
+              value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
               }
@@ -226,7 +229,7 @@ export default function Homepage() {
               className="flex w-full rounded-md border px-3 py-1 text-base shadow-sm md:text-sm h-11 bg-slate-50-50 border-slate-200 focus:white transition-colors"
             />
             <textarea
-              value={feedbackData.feedback}
+              value={formData.feedback}
               onChange={(e) =>
                 setFormData({ ...formData, feedback: e.target.value })
               }
