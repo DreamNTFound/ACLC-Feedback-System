@@ -257,7 +257,7 @@ export default function Homepage() {
                   </svg>
                 </button>
                 {openSelectFBCat && (
-                  <ul className="absolute mt-1 w-full bg-white border rounded-md shadow-md sm:w-48">
+                  <ul className="absolute mt-1 w-full bg-white border rounded-md shadow-md sm:w-48 z-50">
                     {categorySelections.map((option) => (
                       <li
                         key={option}
