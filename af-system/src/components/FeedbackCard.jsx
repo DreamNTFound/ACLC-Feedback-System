@@ -26,7 +26,11 @@ export const FeedbackCard = ({ feedback, onLikeUpdate }) => {
                 <div className="inline-flex items-center rounded-md px-2.5 py-0.5 transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 bg-blue-50 text-blue-700 border-blue-200 border text-xs font-medium">
                   {feedback.category || "N/A"}
                 </div>
-                <span className="text-lg leading-none">{feedback.type}</span>
+                <span className="text-lg leading-none">
+                  {typeof feedback.type === "string"
+                    ? feedback.type
+                    : feedback.type?.value || "N/A"}
+                </span>
               </div>
               <span className="text-xs text-slate-400 whitespace-nowrap">
                 {new Date(feedback.created_at).toLocaleDateString()}
