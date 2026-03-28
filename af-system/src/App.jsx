@@ -4,10 +4,20 @@ import Login from "./pages/Login";
 import Homepage from "./pages/Homepage";
 import AdminDashboard from "./pages/AdminDashboard";
 import "./App.css";
+import { authService } from "./services/authService";
 
-function ProtectedRoute({ children }) {
-  const isAuthenticated = !!localStorage.getItem("user");
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+function ProtectedRoute({ children, allowedRoles }) {
+  const user = authService.getCurrentUser();
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && !allowedRoles.includes(user?.role)) {
+    return <Navigate to="/index" replace />;
+  }
+
+  return children;
 }
 
 function App() {
@@ -24,8 +34,22 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route path="/index" element={<Homepage />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route
+            path="index"
+            element={
+              <ProtectedRoute allowedRoles={["student"]}>
+                <Homepage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]}>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
         </Route>
       </Routes>
     </>
