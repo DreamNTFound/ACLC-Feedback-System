@@ -13,7 +13,7 @@ export default function Login() {
     if (user?.role === "admin") {
       navigate("/admin-dashboard");
     } else if (user?.role === "student") {
-      navigate("/index");
+      navigate("/home");
     }
   }, [navigate]);
 
@@ -23,7 +23,7 @@ export default function Login() {
       if (user.role === "admin") {
         navigate("/admin-dashboard");
       } else if (user.role === "student") {
-        navigate("/index");
+        navigate("/home");
       }
     } catch (error) {
       console.error("Login error:", error);
