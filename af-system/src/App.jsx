@@ -35,7 +35,7 @@ function App() {
           }
         >
           <Route
-            path="homepage"
+            path="home"
             element={
               <ProtectedRoute allowedRoles={["student"]}>
                 <Homepage />
