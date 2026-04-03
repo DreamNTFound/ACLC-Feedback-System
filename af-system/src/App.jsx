@@ -20,6 +20,22 @@ function ProtectedRoute({ children, allowedRoles }) {
   return children;
 }
 
+function RedirectBasedOnRole() {
+  const user = authService.getCurrentUser();
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+  if (user?.role === "admin") {
+    return <Navigate to="/admin-dashboard" replace />;
+  }
+  if (user?.role === "student") {
+    return <Navigate to="/home" replace />;
+  }
+
+  return <Navigate to="/login" replace />;
+}
+
 function App() {
   return (
     <>
@@ -29,13 +45,15 @@ function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={["admin", "student"]}>
               <MainLayout />
             </ProtectedRoute>
           }
         >
+          <Route index element={<RedirectBasedOnRole />} />
+
           <Route
-            path="/home"
+            path="home"
             element={
               <ProtectedRoute allowedRoles={["student"]}>
                 <Homepage />
@@ -43,7 +61,7 @@ function App() {
             }
           />
           <Route
-            path="/admin-dashboard"
+            path="admin-dashboard"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminDashboard />
