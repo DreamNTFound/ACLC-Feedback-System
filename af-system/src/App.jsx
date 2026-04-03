@@ -14,7 +14,7 @@ function ProtectedRoute({ children, allowedRoles }) {
   }
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
-    return <Navigate to="/index" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -35,7 +35,7 @@ function App() {
           }
         >
           <Route
-            path="home"
+            path="/home"
             element={
               <ProtectedRoute allowedRoles={["student"]}>
                 <Homepage />
@@ -43,7 +43,7 @@ function App() {
             }
           />
           <Route
-            path="admin-dashboard"
+            path="/admin-dashboard"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
                 <AdminDashboard />
