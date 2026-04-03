@@ -21,8 +21,10 @@ export default function Login() {
     try {
       const user = await authService.login(usn, password, role);
       if (user.role === "admin") {
+        authService.login(usn, password, role);
         navigate("/admin-dashboard");
       } else if (user.role === "student") {
+        authService.login(usn, password, role);
         navigate("/home");
       }
     } catch (error) {
