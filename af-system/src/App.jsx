@@ -9,7 +9,7 @@ import { authService } from "./services/authService";
 function ProtectedRoute({ children, allowedRoles }) {
   const user = authService.getCurrentUser();
 
-  if (!user) {
+  if (user === null) {
     return <Navigate to="/login" replace />;
   }
 
