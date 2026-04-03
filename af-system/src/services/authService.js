@@ -27,6 +27,7 @@ export const authService = {
             resolve(user);
           } else {
             console.log("Login Failed");
+            alert("Invalid USN or password");
             reject(new Error("Invalid USN or password"));
           }
         } else if (role === "student") {
@@ -36,6 +37,7 @@ export const authService = {
             resolve(user);
           } else {
             console.log("Login Failed");
+            alert("Invalid USN");
             reject(new Error("Invalid USN"));
           }
         }
