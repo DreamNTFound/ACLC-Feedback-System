@@ -36,7 +36,7 @@ export default function Navbar() {
               Logout
             </button>
             <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center">
-              <span className="text-white text-sm font-bold">FB</span>
+              <span className="text-white text-sm font-bold">AFS</span>
             </div>
           </div>
         </div>
