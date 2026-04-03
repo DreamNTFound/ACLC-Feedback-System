@@ -22,7 +22,7 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-slate-900 tracking-tight">
-              Anonymous Feedback
+              ACLC Feedback System
             </h1>
             <p className="text-sm text-slate-500 mt-0.5">
               Speak freely. Improve together.
@@ -31,12 +31,12 @@ export default function Navbar() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleLogout}
-              className="text-xs text-slate-foreground hover:text-foreground border border-border rounded-lg px-3 py-1.5 transition-colors"
+              className="text-xs text-slate-foreground hover:text-foreground border border-border rounded-lg px-4 py-2.5 hover:bg-slate-100 transition-colors"
             >
               Logout
             </button>
             <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center">
-              <span className="text-white text-sm font-bold">AF</span>
+              <span className="text-white text-sm font-bold">FB</span>
             </div>
           </div>
         </div>
