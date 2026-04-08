@@ -8,10 +8,10 @@ export const categorySelections = [
 ];
 
 export const types = [
-  { label: "👍 Positive", value: "👍" },
-  { label: "💬 Neutral", value: "💬" },
-  { label: "💡 Suggestion", value: "💡" },
-  { label: "⚠️ Concern", value: "⚠️" },
+  { label: "👍 Positive", value: "👍 Positive" },
+  { label: "💬 Neutral", value: "💬 Neutral" },
+  { label: "💡 Suggestion", value: "💡 Suggestion" },
+  { label: "⚠️ Concern", value: "⚠️ Concern" },
 ];
 
 export const getCategoryCounts = (feedbackData) => {
