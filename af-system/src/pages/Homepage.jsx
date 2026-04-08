@@ -12,7 +12,6 @@ import {
   submitFeedback,
   getLikes,
   incrementLike,
-  deleteFeedback,
 } from "../services/feedbackServices";
 import { seedFeedback } from "../services/seedData";
 import { FeedbackCard } from "../components/FeedbackCard";
@@ -96,11 +95,6 @@ export default function Homepage() {
     (sum, item) => sum + (item.likes || 0),
     0,
   );
-
-  const handleDelete = async (id) => {
-    const updatedFeedback = await deleteFeedback(id);
-    setFeedbackData(updatedFeedback);
-  };
 
   return (
     <>
@@ -498,7 +492,6 @@ export default function Homepage() {
               key={item.id}
               feedback={item}
               onLikeUpdate={handleLike}
-              onDelete={handleDelete}
             />
           ))}
         </div>
