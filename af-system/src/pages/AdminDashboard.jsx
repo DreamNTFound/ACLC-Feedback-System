@@ -155,28 +155,28 @@ export default function AdminDashboard() {
           <div className="rounded-xl border p-3 bg-emerald-50 text-emerald-700 border-emerald-200">
             <p className="text-2xl mb-1">👍</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "👍")?.count || 0}
+              {filteredTypesCount.find((t) => t.value === "👍 Positive")?.count || 0}
             </p>
             <p className="text-xs font-medium">Positive</p>
           </div>
           <div className="rounded-xl border p-3 bg-blue-50 text-blue-700 border-blue-200">
             <p className="text-2xl mb-1">💬</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "💬")?.count || 0}
+              {filteredTypesCount.find((t) => t.value === "💬 Neutral")?.count || 0}
             </p>
             <p className="text-xs font-medium">Neutral</p>
           </div>
           <div className="rounded-xl border p-3 bg-amber-50 text-amber-700 border-amber-200">
             <p className="text-2xl mb-1">💡</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "💡")?.count}
+              {filteredTypesCount.find((t) => t.value === "💡 Suggestion")?.count}
             </p>
             <p className="text-xs font-medium">Suggest</p>
           </div>
           <div className="rounded-xl border p-3 bg-rose-50 text-rose-700 border-rose-200">
             <p className="text-2xl mb-1">⚠️</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "⚠️")?.count}
+              {filteredTypesCount.find((t) => t.value === "⚠️ Concern")?.count}
             </p>
             <p className="text-xs font-medium">Concern</p>
           </div>
