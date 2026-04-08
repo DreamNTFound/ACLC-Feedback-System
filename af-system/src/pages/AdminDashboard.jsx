@@ -7,7 +7,11 @@ import {
   sortFeedback,
 } from "../utils/formatHelpers";
 import { getThisWeekFeedback } from "../utils/weekFormat";
-import { getFeedback, getLikes } from "../services/feedbackServices";
+import {
+  getFeedback,
+  getLikes,
+  deleteFeedback,
+} from "../services/feedbackServices";
 import { seedFeedback } from "../services/seedData";
 import { FeedbackCard } from "../components/FeedbackCard";
 
@@ -58,6 +62,11 @@ export default function AdminDashboard() {
     ...t,
     count: feedbackData.filter((fb) => fb.type === t.value).length,
   }));
+
+  const handleDelete = async (id) => {
+    const updatedFeedback = await deleteFeedback(id);
+    setFeedbackData(updatedFeedback);
+  };
 
   return (
     <>
@@ -155,21 +164,26 @@ export default function AdminDashboard() {
           <div className="rounded-xl border p-3 bg-emerald-50 text-emerald-700 border-emerald-200">
             <p className="text-2xl mb-1">👍</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "👍 Positive")?.count || 0}
+              {filteredTypesCount.find((t) => t.value === "👍 Positive")
+                ?.count || 0}
             </p>
             <p className="text-xs font-medium">Positive</p>
           </div>
           <div className="rounded-xl border p-3 bg-blue-50 text-blue-700 border-blue-200">
             <p className="text-2xl mb-1">💬</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "💬 Neutral")?.count || 0}
+              {filteredTypesCount.find((t) => t.value === "💬 Neutral")
+                ?.count || 0}
             </p>
             <p className="text-xs font-medium">Neutral</p>
           </div>
           <div className="rounded-xl border p-3 bg-amber-50 text-amber-700 border-amber-200">
             <p className="text-2xl mb-1">💡</p>
             <p className="text-lg font-bold">
-              {filteredTypesCount.find((t) => t.value === "💡 Suggestion")?.count}
+              {
+                filteredTypesCount.find((t) => t.value === "💡 Suggestion")
+                  ?.count
+              }
             </p>
             <p className="text-xs font-medium">Suggest</p>
           </div>
@@ -349,7 +363,11 @@ export default function AdminDashboard() {
         </div>
         <div className="grid gap-4">
           {sortedFeedback.map((item) => (
-            <FeedbackCard key={item.id} feedback={item} />
+            <FeedbackCard
+              key={item.id}
+              feedback={item}
+              onDelete={handleDelete}
+            />
           ))}
         </div>
       </div>
