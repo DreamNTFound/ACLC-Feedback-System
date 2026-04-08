@@ -34,3 +34,11 @@ export const incrementLike = async (id) =>
     setStorage(LIKE_KEY, feedback_likes);
     return updatedLikes;
   });
+
+export const deleteFeedback = async (id) =>
+  api(() => {
+    const feedback = getStorage(FEEDBACK_KEY) || [];
+    const updatedFeedback = feedback.filter((item) => item.id !== id);
+    setStorage(FEEDBACK_KEY, updatedFeedback);
+    return updatedFeedback;
+  });
