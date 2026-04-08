@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
+import logo from "../../assets/aclc-logo.png";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -20,13 +21,20 @@ export default function Navbar() {
     <>
       <nav>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
-              ACLC Feedback System
-            </h1>
-            <p className="text-sm text-slate-500 mt-0.5">
-              Speak freely. Improve together.
-            </p>
+          <div className="flex items-center">
+            <img
+              src={logo}
+              alt="ACLC Logo"
+              className="w-10 h-10 mr-2 object-cover rounded-full"
+            />
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+                Feedback System
+              </h1>
+              <p className="text-sm text-slate-500 mt-0.5">
+                Speak freely. Improve together.
+              </p>
+            </div>
           </div>
           <div className="flex items-center gap-3">
             <button
