@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../services/authService";
+import logo from "../assets/aclc-logo.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -38,8 +39,12 @@ export default function Login() {
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-600 text-white text-xl font-bold mb-4">
-              AFS
+            <div className="flex items-center justify-center mb-4">
+              <img
+                src={logo}
+                alt="aclc-logo"
+                className="w-16 h-16 object-cover rounded-full"
+              />
             </div>
             <h1 className="text-2xl font-bold text-foreground">
               ACLC Feedback System
