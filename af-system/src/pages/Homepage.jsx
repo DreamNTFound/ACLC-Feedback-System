@@ -12,11 +12,14 @@ import {
   submitFeedback,
   getLikes,
   incrementLike,
+  deleteFeedback,
 } from "../services/feedbackServices";
 import { seedFeedback } from "../services/seedData";
 import { FeedbackCard } from "../components/FeedbackCard";
+import { authService } from "../services/authService";
 
 export default function Homepage() {
+  const user = authService.getCurrentUser();
   const [openSelectFBCat, setOpenSelectFBCat] = useState(false);
   const [selectCategory, setSelectCategory] = useState("All Category");
   const [openSelectCat, setOpenSelectCat] = useState(false);
@@ -27,6 +30,7 @@ export default function Homepage() {
 
   const initialData = {
     title: "",
+    usn: user.usn,
     feedback: "",
     category: "",
     type: "",
@@ -92,6 +96,11 @@ export default function Homepage() {
     (sum, item) => sum + (item.likes || 0),
     0,
   );
+
+  const handleDelete = async (id) => {
+    const updatedFeedback = await deleteFeedback(id);
+    setFeedbackData(updatedFeedback);
+  };
 
   return (
     <>
@@ -489,6 +498,7 @@ export default function Homepage() {
               key={item.id}
               feedback={item}
               onLikeUpdate={handleLike}
+              onDelete={handleDelete}
             />
           ))}
         </div>
