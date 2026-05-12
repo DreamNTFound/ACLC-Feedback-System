@@ -4,6 +4,7 @@ import { authService } from "../services/authService";
 
 export const FeedbackCard = ({ feedback, likesData, onLike, onDelete }) => {
   const user = authService.getCurrentUser();
+  const isAdmin = user?.role === "admin";
   const [likes, setLikes] = useState(likesData?.totalLikes || 0);
   const [isLiked, setIsLiked] = useState(likesData?.hasLiked || false);
 
@@ -27,7 +28,7 @@ export const FeedbackCard = ({ feedback, likesData, onLike, onDelete }) => {
   }, []);
 
   const handleLike = async () => {
-    if (!user?.usn) return;
+    if (!user?.usn || isAdmin) return;
     try {
       const data = await incrementLike(feedback.id, user.usn);
       setLikes(data.totalLikes);
@@ -125,6 +126,7 @@ export const FeedbackCard = ({ feedback, likesData, onLike, onDelete }) => {
               </div>
               <button
                 onClick={handleLike}
+                disabled={isAdmin}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all text-slate-500 hover:bg-slate-50 hover:text-indigo-600 ${
                   isLiked ? "bg-indigo-50 text-indigo-600" : ""
                 }`}
