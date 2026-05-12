@@ -56,7 +56,10 @@ export default function Login() {
           <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
             <div className="flex border-b border-border">
               <button
-                onClick={() => setRole("student")}
+                onClick={() => {
+                  setRole("student");
+                  setUsn("");
+                }}
                 className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-medium transition-colors bg-primary/5 text-primary border-b-2 border-primary ${
                   role === "student"
                     ? "border-indigo-600 text-indigo-600"
@@ -82,7 +85,11 @@ export default function Login() {
                 <span>Student</span>
               </button>
               <button
-                onClick={() => setRole("admin")}
+                onClick={() => {
+                  setRole("admin");
+                  setUsn("");
+                  setPassword("");
+                }}
                 className={`flex-1 flex items-center justify-center gap-2 py-3.5 text-sm font-medium transition-colors bg-primary/5 text-primary border-b-2 border-primary ${
                   role === "admin"
                     ? "border-indigo-600 text-indigo-600"
