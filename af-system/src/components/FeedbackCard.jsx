@@ -1,28 +1,44 @@
 import { useState, useEffect } from "react";
-import { getLikes } from "../services/feedbackServices";
+import { getLikes, incrementLike } from "../services/feedbackServices";
 import { authService } from "../services/authService";
 
-export const FeedbackCard = ({ feedback, onLikeUpdate, onDelete }) => {
-  const [likes, setLikes] = useState(feedback.likes || 0);
+export const FeedbackCard = ({ feedback, likesData, onLike, onDelete }) => {
   const user = authService.getCurrentUser();
+  const [likes, setLikes] = useState(likesData?.totalLikes || 0);
+  const [isLiked, setIsLiked] = useState(likesData?.hasLiked || false);
 
   useEffect(() => {
-    const fetchLikes = async () => {
-      const likes = await getLikes(feedback.id);
-      setLikes(likes);
-    };
-    fetchLikes();
-  }, [feedback.id]);
+    if (!user?.usn) return;
 
-  const handleLike = () => {
-    onLikeUpdate(feedback.id);
+    const fetchLikes = async () => {
+      try {
+        const data = await getLikes(feedback.id, user.usn);
+        setLikes(data.totalLikes);
+        setIsLiked(data.hasLiked);
+        if (onLike) {
+          onLike(feedback.id, data.totalLikes, data.hasLiked);
+        }
+      } catch (err) {
+        console.error("Failed to fetch likes:", err);
+      }
+    };
+
+    fetchLikes();
+  }, []);
+
+  const handleLike = async () => {
+    if (!user?.usn) return;
+    try {
+      const data = await incrementLike(feedback.id, user.usn);
+      setLikes(data.totalLikes);
+      setIsLiked(data.hasLiked);
+    } catch (err) {
+      console.error("Failed to like feedback:", err);
+    }
   };
 
   const handleDelete = () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this feedback?",
-    );
-    if (confirmDelete) {
+    if (window.confirm("Are you sure you want to delete this feedback?")) {
       onDelete(feedback.id);
     }
   };
@@ -109,7 +125,9 @@ export const FeedbackCard = ({ feedback, onLikeUpdate, onDelete }) => {
               </div>
               <button
                 onClick={handleLike}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all text-slate-500 hover:bg-slate-50 hover:text-indigo-600"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm transition-all text-slate-500 hover:bg-slate-50 hover:text-indigo-600 ${
+                  isLiked ? "bg-indigo-50 text-indigo-600" : ""
+                }`}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -125,7 +143,7 @@ export const FeedbackCard = ({ feedback, onLikeUpdate, onDelete }) => {
                     d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z"
                   />
                 </svg>
-                {feedback.likes !== undefined ? feedback.likes : likes}
+                <span>{likes}</span>
               </button>
             </div>
           </div>
