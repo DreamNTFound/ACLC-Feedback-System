@@ -20,7 +20,10 @@ export const authService = {
       setTimeout(() => {
         if (role === "admin") {
           const user = users.find(
-            (u) => u.usn === usn.trim() && u.password === password.trim(),
+            (u) =>
+              u.usn === usn.trim() &&
+              u.password === password.trim() &&
+              u.role === "admin",
           );
           if (user) {
             localStorage.setItem("user", JSON.stringify(user));
@@ -31,7 +34,9 @@ export const authService = {
             reject(new Error("Invalid USN or password"));
           }
         } else if (role === "student") {
-          const user = users.find((u) => u.usn === usn.trim());
+          const user = users.find(
+            (u) => u.usn === usn.trim() && u.role === "student",
+          );
           if (user) {
             localStorage.setItem("user", JSON.stringify(user));
             resolve(user);
