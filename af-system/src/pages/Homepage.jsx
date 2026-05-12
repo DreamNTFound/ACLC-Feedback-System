@@ -26,6 +26,7 @@ export default function Homepage() {
   const [openSelectType, setOpenSelectType] = useState(false);
   const [selectSort, setSelectSort] = useState("Newest First");
   const [openSelectSort, setOpenSelectSort] = useState(false);
+  const [likesMap, setLikesMap] = useState({});
 
   const initialData = {
     title: "",
@@ -43,18 +44,33 @@ export default function Homepage() {
 
   useEffect(() => {
     seedFeedback();
-    const fetchFeedback = async () => {
+    const load = async () => {
       const feedback = await getFeedback();
-      const feedbackWithLikes = await Promise.all(
-        feedback.map(async (item) => ({
-          ...item,
-          likes: await getLikes(item.id),
-        })),
+      setFeedbackData(feedback);
+
+      const results = await Promise.all(
+        feedback.map((fb) => getLikes(fb.id, user.usn)),
       );
-      setFeedbackData(feedbackWithLikes);
+
+      const map = {};
+      feedback.forEach((fb, i) => {
+        map[fb.id] = results[i];
+      });
+
+      setLikesMap(map);
     };
-    fetchFeedback();
-  }, []);
+
+    load();
+  }, [user.usn]);
+
+  // useEffect(() => {
+  //   seedFeedback();
+  //   const fetchFeedback = async () => {
+  //     const feedback = await getFeedback();
+  //     setFeedbackData(feedback);
+  //   };
+  //   fetchFeedback();
+  // }, [user.usn]);
 
   const getButtonClass = (value) =>
     `px-3 py-2 rounded-lg text-sm border transition-all ${
@@ -65,8 +81,16 @@ export default function Homepage() {
 
   const post = async (e) => {
     e.preventDefault();
+
     const form = await submitFeedback(formData);
+
     setFeedbackData((prev) => [...prev, form]);
+
+    setLikesMap((prev) => ({
+      ...prev,
+      [form.id]: { totalLikes: 0, hasLiked: false },
+    }));
+
     resetForm();
   };
 
@@ -83,16 +107,29 @@ export default function Homepage() {
   const sortedFeedback = sortFeedback(filteredFeedback, selectSort);
 
   const handleLike = async (id) => {
-    const updatedFeedback = await incrementLike(id);
+    const data = await incrementLike(id, user.usn);
+
+    setLikesMap((prev) => ({
+      ...prev,
+      [id]: data,
+    }));
+
     setFeedbackData((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, likes: updatedFeedback } : item,
-      ),
+      prev.map((fb) => (fb.id === id ? { ...fb, likes: data.totalLikes } : fb)),
     );
   };
 
-  const totalUpVotes = feedbackData.reduce(
-    (sum, item) => sum + (item.likes || 0),
+  // const handleLike = async (id) => {
+  //   const data = await incrementLike(id, user.usn);
+
+  //   setLikesMap((prev) => ({
+  //     ...prev,
+  //     [id]: data,
+  //   }));
+  // };
+
+  const totalUpVotes = Object.values(likesMap).reduce(
+    (sum, item) => sum + (item?.totalLikes || 0),
     0,
   );
 
@@ -229,7 +266,7 @@ export default function Homepage() {
                 setFormData({ ...formData, title: e.target.value })
               }
               placeholder="Give your feedback a title..."
-              className="flex w-full rounded-md border px-3 py-1 text-base shadow-sm md:text-sm h-11 bg-slate-50-50 border-slate-200 focus:white transition-colors"
+              className="flex w-full rounded-md border px-3 py-1 text-base shadow-sm md:text-sm h-11 bg-slate-50 border-slate-200 focus:white transition-colors"
             />
             <textarea
               value={formData.feedback}
@@ -237,7 +274,7 @@ export default function Homepage() {
                 setFormData({ ...formData, feedback: e.target.value })
               }
               placeholder="Describe your feedback in detail..."
-              className="flex w-full rounded-md border px-3 py-1 text-base shadow-sm md:text-sm min-h-[120px] bg-slate-50-50 border-slate-200 focus:white transition-colors resize-none"
+              className="flex w-full rounded-md border px-3 py-1 text-base shadow-sm md:text-sm min-h-[120px] bg-slate-50 border-slate-200 focus:white transition-colors resize-none"
             />
             <div className="flex flex-col sm:flex-row gap-3">
               <div className="relative w-full sm:w-48">
@@ -491,7 +528,8 @@ export default function Homepage() {
             <FeedbackCard
               key={item.id}
               feedback={item}
-              onLikeUpdate={handleLike}
+              likesData={likesMap[item.id]}
+              onLike={handleLike}
             />
           ))}
         </div>
