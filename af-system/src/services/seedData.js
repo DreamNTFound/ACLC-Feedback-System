@@ -51,11 +51,11 @@ export const seedFeedback = () => {
       },
     ];
     const feedbackWithLikes = {
-      1: 5,
-      2: 7,
-      3: 10,
-      4: 3,
-      5: 15,
+      1: ["11111111", "22222222"],
+      2: ["33333333"],
+      3: ["44444444", "55555555", "66666666"],
+      4: [],
+      5: ["77777777"],
     };
     localStorage.setItem("feedback", JSON.stringify(initialFeedback));
     localStorage.setItem("feedback_likes", JSON.stringify(feedbackWithLikes));
