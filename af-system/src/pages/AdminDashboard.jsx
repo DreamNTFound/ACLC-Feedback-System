@@ -29,10 +29,10 @@ export default function AdminDashboard() {
     const fetchFeedback = async () => {
       const feedback = await getFeedback();
       const feedbackWithLikes = await Promise.all(
-        feedback.map(async (fb) => ({
-          ...fb,
-          likes: await getLikes(fb.id),
-        })),
+        feedback.map(async (fb) => {
+          const likesData = await getLikes(fb.id);
+          return { ...fb, likes: likesData?.totalLikes || 0 };
+        }),
       );
       setFeedbackData(feedbackWithLikes);
     };
@@ -65,7 +65,13 @@ export default function AdminDashboard() {
 
   const handleDelete = async (id) => {
     const updatedFeedback = await deleteFeedback(id);
-    setFeedbackData(updatedFeedback);
+
+    const mergedFeedback = updatedFeedback.map((fb) => {
+      const old = feedbackData.find((f) => f.id === fb.id);
+      return { ...fb, likes: old?.likes || 0 };
+    });
+
+    setFeedbackData(mergedFeedback);
   };
 
   return (
